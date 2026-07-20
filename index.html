@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lendas do Anime - Álbum Oficial</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&family=Noto+Sans+JP:wght@400;700;900&family=Permanent+Marker&display=swap"
+        rel="stylesheet">
+    <!-- Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Sound Control -->
+    <button id="sound-toggle" class="sound-btn" aria-label="Alternar som">
+        <svg class="sound-icon-on" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor"
+                d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+        </svg>
+        <svg class="sound-icon-off hidden" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor"
+                d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.5C15.58,18 14.83,18.4 14,18.71V20.77C15.38,20.44 16.63,19.78 17.7,18.9L20.73,21.93L22,20.66L4.27,3M14,3.23V5.29C14.73,5.5 15.43,5.83 16.07,6.26L14.59,7.74C14.41,7.65 14.21,7.58 14,7.54V9.54L19,14.54C19,13.7 19,12.85 19,12C19,7.72 16,4.14 14,3.23M16.5,12C16.5,11.2 16.1,10.5 15.5,10.05L14,11.55V12.45L15.46,13.9C15.48,13.28 16.5,12.62 16.5,12Z" />
+        </svg>
+    </button>
+
+    <!-- Navigation Arrows -->
+    <button id="btn-prev" class="nav-btn nav-btn-left" aria-label="Página Anterior">
+        <svg viewBox="0 0 24 24" width="36" height="36">
+            <path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+        </svg>
+    </button>
+    <button id="btn-next" class="nav-btn nav-btn-right" aria-label="Próxima Página">
+        <svg viewBox="0 0 24 24" width="36" height="36">
+            <path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+        </svg>
+    </button>
+
+    <!-- Album Container -->
+    <div class="album-viewport" id="album-viewport">
+        <div class="flip-book" id="book">
+
+            <!-- PAGINA 0: CAPA -->
+            <div class="page page-cover" data-density="hard">
+                <div class="page-content cover-content">
+                    <div class="cover-header">
+                        <span class="cover-seal">COLEÇÃO OFICIAL • 伝説</span>
+                    </div>
+                    <div class="cover-body">
+                        <h1 class="cover-title glitch" data-text="ANIME">ANIME</h1>
+                        <h2 class="cover-subtitle glitch" data-text="LEGENDS">LEGENDS</h2>
+                        <div class="cover-art">
+                            <div class="art-grid"></div>
+
+                            <!-- Floating Mini Cards Silhouette Collage -->
+                            <div class="mini-card mc-turing">
+                                <div class="mc-avatar">DBZ</div>
+                                <span class="mc-num">#03</span>
+                            </div>
+                            <div class="mini-card mc-guido">
+                                <div class="mc-avatar">OP</div>
+                                <span class="mc-num">#08</span>
+                            </div>
+                            <div class="mini-card mc-jobs">
+                                <div class="mc-avatar">NAR</div>
+                                <span class="mc-num">#06</span>
+                            </div>
+
+                            <!-- Central Glowing Ki Energy Sphere -->
+                            <div class="tech-sphere">
+                                <div class="sphere-core">
+                                    <svg class="art-logo" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2l2.4 5.6 5.6 2.4-5.6 2.4-2.4 5.6-2.4-5.6-5.6-2.4 5.6-2.4z" />
+                                    </svg>
+                                </div>
+                                <div class="sphere-ring ring-1"></div>
+                                <div class="sphere-ring ring-2"></div>
+                            </div>
+                        </div>
+                        <p class="cover-footer-text">COLEÇÃO OFICIAL DE LENDAS JAPONESAS</p>
+                    </div>
+                    <div class="cover-footer">
+                        <span>2026 EDIÇÃO ESPECIAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGINA 1: CLÁSSICOS -->
+            <div class="page page-left" data-category="classics">
+                <div class="page-content">
+                    <div class="page-header">
+                        <span class="tech-badge badge-classics">CLÁSSICOS • 古典</span>
+                        <h3 class="page-title">Fundadores do Império Anime</h3>
+                    </div>
+                    <div class="stickers-grid">
+                        <div class="sticker-slot">
+                            <div class="slot-number">#01</div>
+                            <div class="slot-name">Seiya de Pégaso</div>
+                            <div class="slot-role">O cavaleiro que supera qualquer obstáculo por Atena</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#02</div>
+                            <div class="slot-name">Sailor Moon</div>
+                            <div class="slot-role">A guerreira do amor e da justiça da Lua</div>
+                        </div>
+                        <div class="sticker-slot special-slot">
+                            <div class="slot-number">#03</div>
+                            <div class="slot-name">Son Goku</div>
+                            <div class="slot-role">O guerreiro Saiyajin mais forte do universo e defensor da Terra</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#04</div>
+                            <div class="slot-name">Yusuke Urameshi</div>
+                            <div class="slot-role">O detetive espiritual rebelde e destemido</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#05</div>
+                            <div class="slot-name">Spike Spiegel</div>
+                            <div class="slot-role">O melancólico e habilidoso caçador de recompensas espacial</div>
+                        </div>
+                    </div>
+                    <div class="page-footer">Pág. 1</div>
+                </div>
+            </div>
+
+            <!-- PAGINA 2: SHONEN -->
+            <div class="page page-right" data-category="shonen">
+                <div class="page-content">
+                    <div class="page-header">
+                        <span class="tech-badge badge-shonen">SHONEN • 少年</span>
+                        <h3 class="page-title">A Trindade de Ouro e Herdeiros</h3>
+                    </div>
+                    <div class="stickers-grid">
+                        <div class="sticker-slot">
+                            <div class="slot-number">#06</div>
+                            <div class="slot-name">Naruto Uzumaki</div>
+                            <div class="slot-role">O jovem ninja da folha que sonhava em ser Hokage</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#07</div>
+                            <div class="slot-name">Ichigo Kurosaki</div>
+                            <div class="slot-role">O Shinigami substituto e protetor da Soul Society</div>
+                        </div>
+                        <div class="sticker-slot special-slot">
+                            <div class="slot-number">#08</div>
+                            <div class="slot-name">Monkey D. Luffy</div>
+                            <div class="slot-role">O capitão pirata com corpo de borracha que busca o One Piece</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#09</div>
+                            <div class="slot-name">Edward Elric</div>
+                            <div class="slot-role">O alquimista de aço em busca da Pedra Filosofal</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#10</div>
+                            <div class="slot-name">Killua Zoldyck</div>
+                            <div class="slot-role">O jovem prodígio assassino da família Zoldyck</div>
+                        </div>
+                    </div>
+                    <div class="page-footer">Pág. 2</div>
+                </div>
+            </div>
+
+            <!-- PAGINA 3: MESTRES -->
+            <div class="page page-left" data-category="masters">
+                <div class="page-content">
+                    <div class="page-header">
+                        <span class="tech-badge badge-masters">MESTRES • 師匠</span>
+                        <h3 class="page-title">Guias da Sabedoria e Poder</h3>
+                    </div>
+                    <div class="stickers-grid">
+                        <div class="sticker-slot">
+                            <div class="slot-number">#11</div>
+                            <div class="slot-name">Mestre Kame</div>
+                            <div class="slot-role">O criador do clássico e devastador golpe Kamehameha</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#12</div>
+                            <div class="slot-name">Kakashi Hatake</div>
+                            <div class="slot-role">O ninja copiador lendário e líder do Time 7</div>
+                        </div>
+                        <div class="sticker-slot special-slot">
+                            <div class="slot-number">#13</div>
+                            <div class="slot-name">Satoru Gojo</div>
+                            <div class="slot-role">O feiticeiro Jujutsu mais poderoso da era moderna</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#14</div>
+                            <div class="slot-name">Jiraiya</div>
+                            <div class="slot-role">O lendário Ero-Sennin, escritor e mentor de heróis</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#15</div>
+                            <div class="slot-name">Levi Ackerman</div>
+                            <div class="slot-role">O capitão implacável e soldado mais forte da humanidade</div>
+                        </div>
+                    </div>
+                    <div class="page-footer">Pág. 3</div>
+                </div>
+            </div>
+
+            <!-- PAGINA 4: VILÕES -->
+            <div class="page page-right" data-category="villains">
+                <div class="page-content">
+                    <div class="page-header">
+                        <span class="tech-badge badge-villains">VILÕES • 悪役</span>
+                        <h3 class="page-title">Antagonistas Icônicos</h3>
+                    </div>
+                    <div class="stickers-grid">
+                        <div class="sticker-slot">
+                            <div class="slot-number">#16</div>
+                            <div class="slot-name">Frieza</div>
+                            <div class="slot-role">O cruel e impiedoso imperador galáctico</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#17</div>
+                            <div class="slot-name">Madara Uchiha</div>
+                            <div class="slot-role">O lendário líder Uchiha que chocou o mundo shinobi</div>
+                        </div>
+                        <div class="sticker-slot special-slot">
+                            <div class="slot-number">#18</div>
+                            <div class="slot-name">Light Yagami / Kira</div>
+                            <div class="slot-role">O portador do caderno da morte em busca de um novo mundo</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#19</div>
+                            <div class="slot-name">Hisoka Morow</div>
+                            <div class="slot-role">O enigmático e mortal mágico sedento por batalhas</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#20</div>
+                            <div class="slot-name">Sosuke Aizen</div>
+                            <div class="slot-role">O brilhante arquiteto da traição e ex-capitão Shinigami</div>
+                        </div>
+                    </div>
+                    <div class="page-footer">Pág. 4</div>
+                </div>
+            </div>
+
+            <!-- PAGINA 5: NOVA GERAÇÃO -->
+            <div class="page page-left" data-category="newera">
+                <div class="page-content">
+                    <div class="page-header">
+                        <span class="tech-badge badge-newera">NOVA ERA • 新世代</span>
+                        <h3 class="page-title">A Revolução do Anime Moderno</h3>
+                    </div>
+                    <div class="stickers-grid">
+                        <div class="sticker-slot">
+                            <div class="slot-number">#21</div>
+                            <div class="slot-name">Tanjiro Kamado</div>
+                            <div class="slot-role">O caçador de demônios que luta para salvar sua irmã</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#22</div>
+                            <div class="slot-name">Eren Yeager</div>
+                            <div class="slot-role">O portador do Titã de Ataque em busca de liberdade absoluta</div>
+                        </div>
+                        <div class="sticker-slot special-slot">
+                            <div class="slot-number">#23</div>
+                            <div class="slot-name">Saitama</div>
+                            <div class="slot-role">O herói entediado que derrota inimigos com um único soco</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#24</div>
+                            <div class="slot-name">Deku / Izuku Midoriya</div>
+                            <div class="slot-role">O jovem determinado herdeiro do One For All</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#25</div>
+                            <div class="slot-name">Shigeo Kageyama / Mob</div>
+                            <div class="slot-role">O jovem paranormal com imenso poder oculto</div>
+                        </div>
+                    </div>
+                    <div class="page-footer">Pág. 5</div>
+                </div>
+            </div>
+
+            <!-- PAGINA 6: FANTASIA -->
+            <div class="page page-right" data-category="fantasy">
+                <div class="page-content">
+                    <div class="page-header">
+                        <span class="tech-badge badge-fantasy">FANTASIA • 幻想</span>
+                        <h3 class="page-title">Mundos Mágicos e Cinema</h3>
+                    </div>
+                    <div class="stickers-grid">
+                        <div class="sticker-slot">
+                            <div class="slot-number">#26</div>
+                            <div class="slot-name">Totoro</div>
+                            <div class="slot-role">O adorável e gigante espírito guardião da floresta</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#27</div>
+                            <div class="slot-name">Chihiro Ogino</div>
+                            <div class="slot-role">A jovem que desbravou o enigmático mundo dos espíritos</div>
+                        </div>
+                        <div class="sticker-slot special-slot">
+                            <div class="slot-number">#28</div>
+                            <div class="slot-name">Ashitaka</div>
+                            <div class="slot-role">O príncipe guerreiro em busca da cura para sua maldição</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#29</div>
+                            <div class="slot-name">Howl Pendragon</div>
+                            <div class="slot-role">O vaidoso e poderoso mago dono do castelo itinerante</div>
+                        </div>
+                        <div class="sticker-slot">
+                            <div class="slot-number">#30</div>
+                            <div class="slot-name">Você</div>
+                            <div class="slot-role">Coloque sua figurinha Otaku aqui!</div>
+                        </div>
+                    </div>
+                    <div class="page-footer">Pág. 6</div>
+                </div>
+            </div>
+
+            <!-- PAGINA 7: CONTRACAPA -->
+            <div class="page page-cover-back" data-density="hard">
+                <div class="page-content cover-back-content">
+                    <div class="cover-back-header">
+                        <h2>ANIME LEGENDS</h2>
+                    </div>
+                    <div class="cover-back-body">
+                        <div class="tech-logo-collage">
+                            <span>CLÁSSICOS</span> • <span>SHONEN</span> • <span>MESTRES</span> • <span>VILÕES</span> •
+                            <span>NOVA ERA</span> • <span>FANTASIA</span>
+                        </div>
+                        <p class="summary-text">
+                            O Anime Legends é um tributo interativo às obras-primas da animação japonesa. Reunindo os
+                            guerreiros mais poderosos, mentes mais brilhantes e mundos fantásticos que cativaram
+                            gerações inteiras e definiram a cultura pop mundial.
+                        </p>
+                        <div class="barcode-container">
+                            <div class="barcode">
+                                <!-- Simulated barcode lines -->
+                                <div class="bar"></div>
+                                <div class="bar thin"></div>
+                                <div class="bar"></div>
+                                <div class="bar thick"></div>
+                                <div class="bar thin"></div>
+                                <div class="bar"></div>
+                                <div class="bar thick"></div>
+                                <div class="bar"></div>
+                                <div class="bar thin"></div>
+                                <div class="bar thick"></div>
+                            </div>
+                            <span class="barcode-number">9 788575 228494</span>
+                        </div>
+                    </div>
+                    <div class="cover-back-footer">
+                        <span>Edição Especial • Anime Legends • 2026</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Page Flip Library -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+    <!-- Logic -->
+    <script src="app.js"></script>
+</body>
+
+</html>
