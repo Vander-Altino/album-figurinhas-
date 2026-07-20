@@ -1,9 +1,10 @@
+
 // ===================================================
 // CONFIGURAÇÃO DA API (Automática Local / Online)
 // ===================================================
 const API_BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:8000"
-    : "https://seu-backend-na-nuvem.onrender.com"; // Substitua pela URL real do seu backend na nuvem quando fizer o deploy
+    : "https://album-figurinhas-u75f.onrender.com";
 
 // ===================================================
 // FUNÇÃO: Preenche os slots do álbum com imagens da API
