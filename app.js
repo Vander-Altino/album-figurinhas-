@@ -7,26 +7,38 @@ const API_BASE_URL = window.location.hostname === "localhost" || window.location
 
 // ===================================================
 // FUNÇÃO: Preenche os slots do álbum com imagens da API
+// Esta função é chamada após o álbum ser inicializado.
 // ===================================================
+
 async function preencherFigurinhas() {
     try {
+        // 1. Busca as figurinhas disponíveis na API
         const response = await fetch(`${API_BASE_URL}/figurinhas`);
 
         if (!response.ok) {
             throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
         }
 
+        // 2. Converte o JSON em array JavaScript
         const figurinhas = await response.json();
+
+        // 3. Cria um Map de id → figurinha para lookup rápido
+        //    Ex: 1 → { id: 1, nome: "Seiya de Pégaso", imagem_url: "/imgs/01-seiya-de-pegaso.jpg" }
         const porId = new Map(figurinhas.map(f => [f.id, f]));
+
+        // 4. Percorre todos os slots do HTML
         const slots = document.querySelectorAll(".sticker-slot");
 
         for (const slot of slots) {
             const slotNumeroEl = slot.querySelector(".slot-number");
             if (!slotNumeroEl) continue;
 
+            // Extrai o número do slot: "#01" → 1
             const id = parseInt(slotNumeroEl.textContent.replace("#", ""), 10);
+
             if (!porId.has(id)) continue;
 
+            // A figurinha existe: insere a imagem
             const figurinha = porId.get(id);
 
             const img = document.createElement("img");
@@ -35,15 +47,16 @@ async function preencherFigurinhas() {
             img.className = "sticker-img";
 
             img.onload = () => slot.classList.add("slot-preenchido");
-            img.onerror = () => console.warn(`Imagem não encontrada: ${figurinha.nome}`);
+            img.onerror = () => console.warn(`Imagem de lenda não encontrada: ${figurinha.nome}`);
 
             slot.insertBefore(img, slot.firstChild);
         }
 
-        console.log(`✅ ${figurinhas.length} figurinhas carregadas da API!`);
+        console.log(`✅ ${figurinhas.length} figurinhas de animes carregadas da API!`);
 
     } catch (erro) {
-        console.warn("⚠️ Não foi possível conectar à API:", erro.message);
+        console.warn("⚠️  Não foi possível conectar à API do backend de animes:", erro.message);
+        console.info("ℹ️  Inicie o servidor localmente ou verifique a URL da API em produção.");
     }
 }
 
@@ -52,31 +65,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnPrev = document.getElementById("btn-prev");
     const btnNext = document.getElementById("btn-next");
     const soundToggle = document.getElementById("sound-toggle");
-    const iconOn = soundToggle ? soundToggle.querySelector(".sound-icon-on") : null;
-    const iconOff = soundToggle ? soundToggle.querySelector(".sound-icon-off") : null;
+    const iconOn = soundToggle.querySelector(".sound-icon-on");
+    const iconOff = soundToggle.querySelector(".sound-icon-off");
 
     let isMuted = false;
     let pageFlip = null;
 
+    // 1. Initialize St.PageFlip
     try {
         pageFlip = new St.PageFlip(bookElement, {
-            width: 550,
-            height: 800,
-            size: "fit", // Ajustado para escalar proporcionalmente sem cortes no mobile
-            minWidth: 280,
-            maxWidth: 800,
-            minHeight: 400,
-            maxHeight: 1100,
+            width: 550, // Base page width
+            height: 800, // Base page height
+            size: "stretch",
+            minWidth: 315,
+            maxWidth: 1000,
+            minHeight: 420,
+            maxHeight: 1350,
             drawShadow: true,
             maxShadowOpacity: 0.4,
             showCover: true,
-            mobileScrollSupport: false,
-            useMouseEvents: true, // Garante interatividade otimizada por toque
-            showPageCorners: true,
-            disableFlipByClick: false,
-            flippingTime: 600
+            mobileScrollSupport: true,
+            useMouseEvents: false,
+            showPageCorners: false,
+            disableFlipByClick: true,
+            flippingTime: 800
         });
 
+        // Load pages from HTML
         pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
         let activeDragPage = null;
@@ -112,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const deltaX = clientX - startX;
             const deltaY = clientY - startY;
             const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
             const bookRect = bookElement.getBoundingClientRect();
 
             if (distance > 10 && !dragStarted) {
@@ -119,8 +135,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 let cornerX, cornerY;
                 
                 const centerY = bookRect.top + bookRect.height / 2;
-                cornerY = startY < centerY ? 0 : bookRect.height;
-                cornerX = activeDragPage.index % 2 === 0 ? bookRect.width : 0;
+                if (startY < centerY) {
+                    cornerY = 0;
+                } else {
+                    cornerY = bookRect.height;
+                }
+
+                if (activeDragPage.index % 2 === 0) {
+                    cornerX = bookRect.width;
+                } else {
+                    cornerX = 0;
+                }
                 
                 document.body.classList.add("dragging");
                 pageFlip.startUserTouch({ x: cornerX, y: cornerY });
@@ -146,27 +171,40 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.remove("dragging");
         };
 
-        window.addEventListener("mousemove", (e) => handleMove(e.clientX, e.clientY, false));
-        window.addEventListener("touchmove", (e) => {
-            if (e.touches.length > 0) handleMove(e.touches[0].clientX, e.touches[0].clientY, true);
+        window.addEventListener("mousemove", (e) => {
+            handleMove(e.clientX, e.clientY, false);
         });
 
-        window.addEventListener("mouseup", (e) => handleRelease(e.clientX, e.clientY, false));
+        window.addEventListener("touchmove", (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                handleMove(touch.clientX, touch.clientY, true);
+            }
+        });
+
+        window.addEventListener("mouseup", (e) => {
+            handleRelease(e.clientX, e.clientY, false);
+        });
+
         window.addEventListener("touchend", (e) => {
             const touch = e.changedTouches[0] || e.touches[0];
-            if (touch) handleRelease(touch.clientX, touch.clientY, true);
-            else handleRelease(startX, startY, true);
+            if (touch) {
+                handleRelease(touch.clientX, touch.clientY, true);
+            } else {
+                handleRelease(startX, startY, true);
+            }
         });
 
         bookElement.style.display = "block";
         preencherFigurinhas();
 
     } catch (error) {
-        console.error("Erro ao inicializar PageFlip:", error);
+        console.error("Erro ao inicializar a biblioteca PageFlip:", error);
     }
 
     function playPaperTurnSound() {
         if (isMuted) return;
+
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             if (!AudioContext) return;
@@ -181,8 +219,16 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let i = 0; i < bufferSize; i++) {
                 const progress = i / bufferSize;
                 const noise = Math.random() * 2 - 1;
-                const envelope = progress < 0.3 ? progress / 0.3 : (1 - progress) / 0.7;
+
+                let envelope = 0;
+                if (progress < 0.3) {
+                    envelope = progress / 0.3;
+                } else {
+                    envelope = (1 - progress) / 0.7;
+                }
+
                 const paperCrackle = Math.random() > 0.985 ? (Math.random() * 2 - 1) * 0.35 : 0;
+
                 data[i] = (noise * 0.65 + paperCrackle) * envelope * 0.12;
             }
 
@@ -192,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const bandpassFilter = audioCtx.createBiquadFilter();
             bandpassFilter.type = "bandpass";
             bandpassFilter.Q.value = 2.0;
+
             bandpassFilter.frequency.setValueAtTime(1500, audioCtx.currentTime);
             bandpassFilter.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + duration);
 
@@ -205,47 +252,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
             noiseNode.start();
         } catch (e) {
-            console.warn("Falha ao tocar som:", e);
+            console.warn("Falha ao tocar som de virada de página:", e);
         }
     }
 
-    if (soundToggle) {
-        soundToggle.addEventListener("click", () => {
-            isMuted = !isMuted;
-            if (isMuted) {
-                if (iconOn) iconOn.classList.add("hidden");
-                if (iconOff) iconOff.classList.remove("hidden");
-            } else {
-                if (iconOn) iconOn.classList.remove("hidden");
-                if (iconOff) iconOff.classList.add("hidden");
-            }
-        });
-    }
+    soundToggle.addEventListener("click", () => {
+        isMuted = !isMuted;
+        if (isMuted) {
+            iconOn.classList.add("hidden");
+            iconOff.classList.remove("hidden");
+        } else {
+            iconOn.classList.remove("hidden");
+            iconOff.classList.add("hidden");
+        }
+    });
 
     if (pageFlip) {
         pageFlip.on("changeState", (e) => {
-            if (e.data === "flipping") playPaperTurnSound();
+            if (e.data === "flipping") {
+                playPaperTurnSound();
+            }
         });
 
         pageFlip.on("flip", (e) => {
             const currentPage = e.data;
             const totalPages = pageFlip.getPageCount();
 
-            if (currentPage === 0) btnPrev.classList.add("hidden");
-            else btnPrev.classList.remove("hidden");
+            if (currentPage === 0) {
+                btnPrev.classList.add("hidden");
+            } else {
+                btnPrev.classList.remove("hidden");
+            }
 
-            if (currentPage === totalPages - 1) btnNext.classList.add("hidden");
-            else btnNext.classList.remove("hidden");
+            if (currentPage === totalPages - 1) {
+                btnNext.classList.add("hidden");
+            } else {
+                btnNext.classList.remove("hidden");
+            }
         });
 
-        if (btnPrev) btnPrev.addEventListener("click", () => pageFlip.flipPrev());
-        if (btnNext) btnNext.addEventListener("click", () => pageFlip.flipNext());
+        btnPrev.addEventListener("click", () => {
+            pageFlip.flipPrev();
+        });
+
+        btnNext.addEventListener("click", () => {
+            pageFlip.flipNext();
+        });
 
         document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft") pageFlip.flipPrev();
-            else if (e.key === "ArrowRight") pageFlip.flipNext();
+            if (e.key === "ArrowLeft") {
+                pageFlip.flipPrev();
+            } else if (e.key === "ArrowRight") {
+                pageFlip.flipNext();
+            }
         });
 
-        if (btnPrev) btnPrev.classList.add("hidden");
+        btnPrev.classList.add("hidden");
     }
 });
